@@ -16,7 +16,18 @@ npm run dev          # http://localhost:3000
 ```
 
 Runs out of the box against an **in-memory seed driver** — no database required.
-Admin login (demo): `admin@sokasafari.com` / `sokasafari` at `/admin`.
+
+### Admin portals (`/admin`)
+
+Three role-scoped portals share the same login page. Select a portal card, then sign in:
+
+| Portal | Email | Password | Access |
+|---|---|---|---|
+| Main Admin | `admin@sokasafari.co.tz` | `sokasafari2026!` | Full platform — all pages |
+| Air Tanzania | `airtanzania@sokasafari.co.tz` | `airtanzania2026!` | Flight bookings & routes only |
+| Dar Express | `darexpress@sokasafari.co.tz` | `darexpress2026!` | Bus bookings & routes only |
+
+Override any credential via `.env.local` (`ADMIN_EMAIL`, `ADMIN_PASSWORD`, `FLIGHT_EMAIL`, `FLIGHT_PASSWORD`, `BUS_EMAIL`, `BUS_PASSWORD`).
 
 ## Data: in-memory now, Supabase-ready
 

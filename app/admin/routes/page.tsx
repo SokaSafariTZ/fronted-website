@@ -3,16 +3,25 @@ import { AdminHeader } from "@/components/admin/AdminHeader";
 import { Card, Badge } from "@/components/ui";
 import { ROUTES, getLocationByCode, getOperatorById } from "@/lib/data/catalog";
 import { formatDuration, formatMoney } from "@/lib/utils";
+import { getAdminRole } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminRoutes() {
+export default async function AdminRoutes() {
+  const role = await getAdminRole();
+  const routes =
+    role === "flights" ? ROUTES.filter((r) => r.mode === "flights")
+    : role === "buses" ? ROUTES.filter((r) => r.mode === "buses")
+    : ROUTES;
+
+  const subtitle =
+    role === "flights" ? "Flight routes operated by Air Tanzania"
+    : role === "buses" ? "Bus routes operated by Dar Express"
+    : "The network that powers schedule generation. Trips are generated per search date from these routes.";
+
   return (
     <>
-      <AdminHeader
-        title="Routes"
-        subtitle="The network that powers schedule generation. Trips are generated per search date from these routes."
-      />
+      <AdminHeader title="Routes" subtitle={subtitle} />
       <div className="p-6">
         <Card className="overflow-x-auto p-0">
           <table className="w-full min-w-[680px] text-sm">
@@ -27,7 +36,7 @@ export default function AdminRoutes() {
               </tr>
             </thead>
             <tbody>
-              {ROUTES.map((r, i) => {
+              {routes.map((r, i) => {
                 const from = getLocationByCode(r.originCode);
                 const to = getLocationByCode(r.destCode);
                 return (

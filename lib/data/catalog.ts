@@ -38,21 +38,9 @@ export const LOCATIONS: Location[] = [
 ];
 
 export const OPERATORS: Operator[] = [
-  // ── Tanzania airlines ─────────────────────────────────────────────────────
+  // ── Demo: one airline, one bus operator ───────────────────────────────────
   { id: "op-tc", code: "TC", name: "Air Tanzania", mode: "flights", logoColor: "#1D6CC8", rating: 4.1 },
-  { id: "op-pw", code: "PW", name: "Precision Air", mode: "flights", logoColor: "#E63946", rating: 4.0 },
-  // ── Regional airlines ─────────────────────────────────────────────────────
-  { id: "op-et", code: "ET", name: "Ethiopian Airlines", mode: "flights", logoColor: "#2E7D32", rating: 4.4 },
-  { id: "op-kq", code: "KQ", name: "Kenya Airways", mode: "flights", logoColor: "#C0392B", rating: 4.1 },
-  { id: "op-sa", code: "SA", name: "South African Airways", mode: "flights", logoColor: "#0A4DA2", rating: 4.0 },
-  { id: "op-wb", code: "WB", name: "RwandAir", mode: "flights", logoColor: "#005CA9", rating: 4.3 },
-  // ── Tanzania bus operators ────────────────────────────────────────────────
   { id: "op-dx", code: "DX", name: "Dar Express", mode: "buses", logoColor: "#F59E0B", rating: 4.2 },
-  { id: "op-th", code: "TH", name: "Tahmeed Coach", mode: "buses", logoColor: "#16A34A", rating: 4.5 },
-  { id: "op-ke", code: "KE", name: "Kilimanjaro Express", mode: "buses", logoColor: "#DC2626", rating: 4.3 },
-  { id: "op-sx", code: "SX", name: "Scandinavian Express", mode: "buses", logoColor: "#0EA5E9", rating: 4.4 },
-  { id: "op-rc", code: "RC", name: "Royal Coach", mode: "buses", logoColor: "#7C3AED", rating: 4.2 },
-  { id: "op-mc", code: "MC", name: "Modern Coast", mode: "buses", logoColor: "#0D9488", rating: 4.3 },
 ];
 
 export interface RouteDef {
@@ -67,34 +55,33 @@ export interface RouteDef {
 }
 
 export const ROUTES: RouteDef[] = [
-  // ── Domestic flights (Tanzania) ───────────────────────────────────────────
-  { mode: "flights", operatorIds: ["op-tc", "op-pw"], originCode: "DAR", destCode: "ZNZ", minutes: 35, daily: 5, basePrice: 60, stops: 0 },
-  { mode: "flights", operatorIds: ["op-pw", "op-tc"], originCode: "DAR", destCode: "JRO", minutes: 55, daily: 4, basePrice: 75, stops: 0 },
-  { mode: "flights", operatorIds: ["op-pw"], originCode: "DAR", destCode: "MWZ", minutes: 100, daily: 3, basePrice: 110, stops: 0 },
-  { mode: "flights", operatorIds: ["op-pw", "op-tc"], originCode: "JRO", destCode: "ZNZ", minutes: 60, daily: 2, basePrice: 80, stops: 0 },
-  // ── Regional flights (Tanzania → East/Southern Africa) ────────────────────
-  { mode: "flights", operatorIds: ["op-tc", "op-kq"], originCode: "DAR", destCode: "NBO", minutes: 90, daily: 3, basePrice: 150, stops: 0 },
-  { mode: "flights", operatorIds: ["op-et", "op-tc"], originCode: "DAR", destCode: "ADD", minutes: 165, daily: 2, basePrice: 220, stops: 0 },
-  { mode: "flights", operatorIds: ["op-sa", "op-tc"], originCode: "DAR", destCode: "JNB", minutes: 195, daily: 2, basePrice: 280, stops: 0 },
-  { mode: "flights", operatorIds: ["op-kq", "op-pw"], originCode: "JRO", destCode: "NBO", minutes: 60, daily: 2, basePrice: 130, stops: 0 },
-  { mode: "flights", operatorIds: ["op-et"], originCode: "JRO", destCode: "ADD", minutes: 165, daily: 1, basePrice: 200, stops: 0 },
-  { mode: "flights", operatorIds: ["op-kq"], originCode: "ZNZ", destCode: "NBO", minutes: 90, daily: 1, basePrice: 160, stops: 0 },
-  // ── Long-haul flights (Tanzania to world) ─────────────────────────────────
+  // ── Domestic flights — Air Tanzania ───────────────────────────────────────
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "DAR", destCode: "ZNZ", minutes: 35, daily: 5, basePrice: 60, stops: 0 },
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "DAR", destCode: "JRO", minutes: 55, daily: 4, basePrice: 75, stops: 0 },
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "DAR", destCode: "MWZ", minutes: 100, daily: 3, basePrice: 110, stops: 0 },
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "JRO", destCode: "ZNZ", minutes: 60, daily: 2, basePrice: 80, stops: 0 },
+  // ── Regional flights — Air Tanzania ───────────────────────────────────────
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "DAR", destCode: "NBO", minutes: 90, daily: 3, basePrice: 150, stops: 0 },
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "DAR", destCode: "ADD", minutes: 165, daily: 2, basePrice: 220, stops: 0 },
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "DAR", destCode: "JNB", minutes: 195, daily: 2, basePrice: 280, stops: 0 },
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "JRO", destCode: "NBO", minutes: 60, daily: 2, basePrice: 130, stops: 0 },
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "ZNZ", destCode: "NBO", minutes: 90, daily: 1, basePrice: 160, stops: 0 },
+  // ── Long-haul flights — Air Tanzania ──────────────────────────────────────
   { mode: "flights", operatorIds: ["op-tc"], originCode: "DAR", destCode: "DXB", minutes: 330, daily: 1, basePrice: 420, stops: 0 },
-  { mode: "flights", operatorIds: ["op-et"], originCode: "DAR", destCode: "CMN", minutes: 480, daily: 1, basePrice: 540, stops: 1 },
-  { mode: "flights", operatorIds: ["op-et"], originCode: "DAR", destCode: "LOS", minutes: 360, daily: 1, basePrice: 380, stops: 1 },
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "DAR", destCode: "CMN", minutes: 480, daily: 1, basePrice: 540, stops: 1 },
+  { mode: "flights", operatorIds: ["op-tc"], originCode: "DAR", destCode: "LOS", minutes: 360, daily: 1, basePrice: 380, stops: 1 },
 
-  // ── Domestic buses (Tanzania) ─────────────────────────────────────────────
-  { mode: "buses", operatorIds: ["op-ke", "op-th", "op-sx"], originCode: "DAR-BT", destCode: "ARU-BT", minutes: 480, daily: 6, basePrice: 12, stops: 2 },
-  { mode: "buses", operatorIds: ["op-ke", "op-rc"], originCode: "DAR-BT", destCode: "MSH-BT", minutes: 420, daily: 4, basePrice: 10, stops: 1 },
+  // ── Domestic buses — Dar Express ──────────────────────────────────────────
+  { mode: "buses", operatorIds: ["op-dx"], originCode: "DAR-BT", destCode: "ARU-BT", minutes: 480, daily: 6, basePrice: 12, stops: 2 },
+  { mode: "buses", operatorIds: ["op-dx"], originCode: "DAR-BT", destCode: "MSH-BT", minutes: 420, daily: 4, basePrice: 10, stops: 1 },
   { mode: "buses", operatorIds: ["op-dx"], originCode: "DAR-BT", destCode: "MWZ-BT", minutes: 720, daily: 2, basePrice: 20, stops: 3 },
-  { mode: "buses", operatorIds: ["op-dx", "op-rc"], originCode: "DAR-BT", destCode: "DOD-BT", minutes: 360, daily: 4, basePrice: 8, stops: 1 },
+  { mode: "buses", operatorIds: ["op-dx"], originCode: "DAR-BT", destCode: "DOD-BT", minutes: 360, daily: 4, basePrice: 8, stops: 1 },
   { mode: "buses", operatorIds: ["op-dx"], originCode: "DAR-BT", destCode: "TGA-BT", minutes: 300, daily: 3, basePrice: 9, stops: 1 },
-  { mode: "buses", operatorIds: ["op-th", "op-rc"], originCode: "DAR-BT", destCode: "ZNZ-BT", minutes: 180, daily: 3, basePrice: 7, stops: 0 },
-  // ── Cross-border buses ────────────────────────────────────────────────────
-  { mode: "buses", operatorIds: ["op-sx", "op-mc"], originCode: "ARU-BT", destCode: "NBO-BT", minutes: 360, daily: 3, basePrice: 20, stops: 1 },
-  { mode: "buses", operatorIds: ["op-sx"], originCode: "ARU-BT", destCode: "KLA-BT", minutes: 720, daily: 1, basePrice: 35, stops: 2 },
-  { mode: "buses", operatorIds: ["op-mc", "op-sx"], originCode: "DAR-BT", destCode: "MBA-BT", minutes: 900, daily: 2, basePrice: 25, stops: 3 },
+  { mode: "buses", operatorIds: ["op-dx"], originCode: "DAR-BT", destCode: "ZNZ-BT", minutes: 180, daily: 3, basePrice: 7, stops: 0 },
+  // ── Cross-border buses — Dar Express ──────────────────────────────────────
+  { mode: "buses", operatorIds: ["op-dx"], originCode: "ARU-BT", destCode: "NBO-BT", minutes: 360, daily: 3, basePrice: 20, stops: 1 },
+  { mode: "buses", operatorIds: ["op-dx"], originCode: "ARU-BT", destCode: "KLA-BT", minutes: 720, daily: 1, basePrice: 35, stops: 2 },
+  { mode: "buses", operatorIds: ["op-dx"], originCode: "DAR-BT", destCode: "MBA-BT", minutes: 900, daily: 2, basePrice: 25, stops: 3 },
 ];
 
 // Mutable runtime catalog — editable from the admin dashboard, persisted on

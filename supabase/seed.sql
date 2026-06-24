@@ -30,22 +30,8 @@ insert into locations (code, name, city, country, country_code, type) values
   ('MBY-BT','Mbeya Bus Terminal','Mbeya','Tanzania','TZ','bus_terminal')
 on conflict (code) do nothing;
 
--- Operators (airlines)
+-- Operators (demo: one airline, one bus)
 insert into operators (code, name, mode, logo_color, rating) values
   ('TC','Air Tanzania','flights','#1B4F8A',4.2),
-  ('PW','Precision Air','flights','#E63946',4.1),
-  ('QC','Coastal Aviation','flights','#2A9D8F',4.3),
-  ('KQ','Kenya Airways','flights','#C0392B',4.1),
-  ('ET','Ethiopian Airlines','flights','#2E7D32',4.4),
-  ('EK','Emirates','flights','#D4AF37',4.7)
-on conflict do nothing;
-
--- Operators (buses)
-insert into operators (code, name, mode, logo_color, rating) values
-  ('TH','Tahmeed Coach','buses','#1B4F8A',4.3),
-  ('KE','Kilimanjaro Express','buses','#E63946',4.1),
-  ('SX','Scandinavian Express','buses','#2A9D8F',4.4),
-  ('DX','Dar Express','buses','#F59E0B',4.0),
-  ('RC','Royal Coach','buses','#7C3AED',4.2),
-  ('MC','Modern Coast','buses','#16A34A',4.3)
+  ('DX','Dar Express','buses','#F59E0B',4.0)
 on conflict do nothing;

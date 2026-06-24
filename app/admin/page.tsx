@@ -5,27 +5,46 @@ import { Card, Badge } from "@/components/ui";
 import { listBookings } from "@/lib/data/store";
 import { listOperators, listLocations } from "@/lib/data/catalog";
 import { formatMoney, formatDate } from "@/lib/utils";
+import { getAdminRole } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminDashboard() {
-  const bookings = listBookings();
+export default async function AdminDashboard() {
+  const role = await getAdminRole();
+  const allBookings = listBookings();
+
+  const bookings =
+    role === "flights" ? allBookings.filter((b) => b.mode === "flights")
+    : role === "buses" ? allBookings.filter((b) => b.mode === "buses")
+    : allBookings;
+
   const revenue = bookings
     .filter((b) => b.paymentStatus === "paid")
     .reduce((s, b) => s + b.totalAmount, 0);
   const flights = bookings.filter((b) => b.mode === "flights").length;
   const buses = bookings.filter((b) => b.mode === "buses").length;
 
-  const stats = [
-    { label: "Bookings", value: String(bookings.length), icon: Ticket, tone: "info" as const },
-    { label: "Revenue (paid)", value: formatMoney(revenue), icon: DollarSign, tone: "success" as const },
-    { label: "Operators", value: String(listOperators().length), icon: Building2, tone: "neutral" as const },
-    { label: "Locations", value: String(listLocations().length), icon: MapPin, tone: "neutral" as const },
-  ];
+  const stats =
+    role === "admin"
+      ? [
+          { label: "Bookings", value: String(bookings.length), icon: Ticket, tone: "info" as const },
+          { label: "Revenue (paid)", value: formatMoney(revenue), icon: DollarSign, tone: "success" as const },
+          { label: "Operators", value: String(listOperators().length), icon: Building2, tone: "neutral" as const },
+          { label: "Locations", value: String(listLocations().length), icon: MapPin, tone: "neutral" as const },
+        ]
+      : [
+          { label: "Bookings", value: String(bookings.length), icon: Ticket, tone: "info" as const },
+          { label: "Revenue (paid)", value: formatMoney(revenue), icon: DollarSign, tone: "success" as const },
+        ];
+
+  const subtitle =
+    role === "flights" ? "Air Tanzania bookings & route overview"
+    : role === "buses" ? "Dar Express bookings & route overview"
+    : "Overview of bookings & inventory";
 
   return (
     <>
-      <AdminHeader title="Dashboard" subtitle="Overview of bookings & inventory" />
+      <AdminHeader title="Dashboard" subtitle={subtitle} />
       <div className="space-y-6 p-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s) => (
@@ -91,8 +110,12 @@ export default function AdminDashboard() {
               <TrendingUp className="size-4 text-primary" /> Mode split
             </h2>
             <div className="space-y-3">
-              <ModeRow icon={Plane} label="Flights" value={flights} total={bookings.length} />
-              <ModeRow icon={Bus} label="Buses" value={buses} total={bookings.length} />
+              {(role === "admin" || role === "flights") && (
+                <ModeRow icon={Plane} label="Flights" value={flights} total={bookings.length} />
+              )}
+              {(role === "admin" || role === "buses") && (
+                <ModeRow icon={Bus} label="Buses" value={buses} total={bookings.length} />
+              )}
             </div>
           </Card>
         </div>
