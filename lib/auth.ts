@@ -6,23 +6,23 @@ export type AdminRole = "admin" | "flights" | "buses";
 
 const CREDENTIALS: Array<{ email: string; password: string; role: AdminRole }> = [
   {
-    email: process.env.ADMIN_EMAIL ?? "admin@sokasafari.com",
-    password: process.env.ADMIN_PASSWORD ?? "sokasafari",
+    email: process.env.ADMIN_EMAIL ?? "",
+    password: process.env.ADMIN_PASSWORD ?? "",
     role: "admin",
   },
   {
-    email: process.env.FLIGHT_EMAIL ?? "airtanzania@sokasafari.com",
-    password: process.env.FLIGHT_PASSWORD ?? "airtanzania",
+    email: process.env.FLIGHT_EMAIL ?? "",
+    password: process.env.FLIGHT_PASSWORD ?? "",
     role: "flights",
   },
   {
-    email: process.env.BUS_EMAIL ?? "darexpress@sokasafari.com",
-    password: process.env.BUS_PASSWORD ?? "darexpress",
+    email: process.env.BUS_EMAIL ?? "",
+    password: process.env.BUS_PASSWORD ?? "",
     role: "buses",
   },
 ];
 
-const SECRET = process.env.ADMIN_SESSION_SECRET ?? "dev-secret-change-me";
+const SECRET = process.env.ADMIN_SESSION_SECRET ?? "";
 
 function sign(value: string) {
   return crypto.createHmac("sha256", SECRET).update(value).digest("hex");
