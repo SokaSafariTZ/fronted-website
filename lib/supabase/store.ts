@@ -252,9 +252,22 @@ export async function updateBookingStatus(
 
 export async function payBooking(
   idOrPnr: string,
+  provider: string = "stripe",
 ): Promise<BookingDetail | null> {
-  return updateBookingStatus(idOrPnr, {
+  const updated = await updateBookingStatus(idOrPnr, {
     paymentStatus: "paid",
     status: "confirmed",
   });
+  if (!updated) return null;
+
+  const sb = getSupabase();
+  await sb.from("payments").insert({
+    booking_id: updated.id,
+    provider,
+    status: "paid",
+    amount: updated.totalAmount,
+    currency: updated.currency,
+  });
+
+  return updated;
 }

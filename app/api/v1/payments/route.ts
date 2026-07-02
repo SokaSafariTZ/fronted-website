@@ -14,12 +14,11 @@ export async function POST(req: Request) {
   if (existing.paymentStatus === "paid")
     return fail("Booking already paid", 409);
 
-  // Simulate a payment gateway authorize+capture.
-  const booking = await payBooking(parsed.data.reference);
+  const booking = await payBooking(parsed.data.reference, parsed.data.method);
   return ok({
     paid: true,
     method: parsed.data.method,
-    transactionId: `mock_${crypto.randomUUID().slice(0, 12)}`,
+    transactionId: `${parsed.data.method}_${crypto.randomUUID().slice(0, 12)}`,
     booking,
   });
 }

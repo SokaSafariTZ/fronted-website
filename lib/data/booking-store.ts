@@ -65,10 +65,11 @@ export async function updateBookingStatus(
 
 export async function payBooking(
   idOrPnr: string,
+  provider: string = "stripe",
 ): Promise<BookingDetail | null> {
   if (useSupabase()) {
     const { payBooking: sbPay } = await import("@/lib/supabase/store");
-    return sbPay(idOrPnr);
+    return sbPay(idOrPnr, provider);
   }
   const { payBooking: memPay } = await import("@/lib/data/store");
   return Promise.resolve(memPay(idOrPnr));

@@ -37,17 +37,17 @@ export default function AdminBookings() {
             <Spinner /> Loading…
           </div>
         ) : !data || data.length === 0 ? (
-          <EmptyState title="No bookings yet" subtitle="Bookings made on the site appear here." />
+          <EmptyState title="No bookings yet" subtitle="Bookings from the mobile app and website appear here." />
         ) : (
           <Card className="overflow-x-auto p-0">
-            <table className="w-full min-w-[760px] text-sm">
+            <table className="w-full min-w-[900px] text-sm">
               <thead>
                 <tr className="border-b border-line text-left text-[11px] uppercase tracking-wide text-muted">
                   <th className="px-4 py-3 font-medium">PNR</th>
-                  <th className="px-4 py-3 font-medium">Mode</th>
                   <th className="px-4 py-3 font-medium">Route</th>
-                  <th className="px-4 py-3 font-medium">Date</th>
-                  <th className="px-4 py-3 font-medium">Pax</th>
+                  <th className="px-4 py-3 font-medium">Departure</th>
+                  <th className="px-4 py-3 font-medium">Passenger(s)</th>
+                  <th className="px-4 py-3 font-medium">Contact</th>
                   <th className="px-4 py-3 font-medium">Payment</th>
                   <th className="px-4 py-3 font-medium">Total</th>
                   <th className="px-4 py-3 font-medium">Status</th>
@@ -55,14 +55,40 @@ export default function AdminBookings() {
               </thead>
               <tbody>
                 {data.map((b) => (
-                  <tr key={b.id} className="border-b border-line/60">
-                    <td className="px-4 py-3 font-mono text-primary">{b.pnr}</td>
-                    <td className="px-4 py-3 capitalize text-subtitle">{b.mode}</td>
-                    <td className="px-4 py-3 text-title">
-                      {b.trip.origin.code} → {b.trip.destination.code}
+                  <tr key={b.id} className="border-b border-line/60 hover:bg-muted/30 transition-colors">
+                    <td className="px-4 py-3">
+                      <span className="font-mono font-bold text-primary">{b.pnr}</span>
+                      <div className="text-[10px] text-muted capitalize mt-0.5">{b.mode}</div>
                     </td>
-                    <td className="px-4 py-3 text-subtitle">{formatDate(b.trip.departAt)}</td>
-                    <td className="px-4 py-3 text-subtitle">{b.passengerCount}</td>
+                    <td className="px-4 py-3 text-title font-medium">
+                      {b.trip.origin.city} ({b.trip.origin.code})
+                      <span className="text-muted mx-1">→</span>
+                      {b.trip.destination.city} ({b.trip.destination.code})
+                    </td>
+                    <td className="px-4 py-3 text-subtitle whitespace-nowrap">
+                      {formatDate(b.trip.departAt)}
+                      <div className="text-[11px] text-muted">
+                        {new Date(b.trip.departAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      {b.passengers.length > 0 ? (
+                        <div className="space-y-0.5">
+                          {b.passengers.map((p) => (
+                            <div key={p.id} className="text-title text-[13px]">
+                              {p.fullName}
+                              <span className="text-muted ml-1 capitalize text-[11px]">· {p.fareClass}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-muted">{b.passengerCount} pax</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-subtitle text-[12px]">
+                      <div>{b.contactEmail}</div>
+                      <div className="text-muted">{b.contactPhone}</div>
+                    </td>
                     <td className="px-4 py-3">
                       <Badge tone={b.paymentStatus === "paid" ? "success" : "warning"}>
                         {b.paymentStatus}

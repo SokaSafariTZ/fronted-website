@@ -113,7 +113,7 @@ create table if not exists bookings (
   id uuid primary key default gen_random_uuid(),
   pnr text unique not null,
   mode travel_mode not null,
-  trip_id uuid not null references trips(id),
+  trip_id text not null,
   user_id uuid references auth.users(id) on delete set null,
   contact_email text not null,
   contact_phone text not null,
@@ -193,3 +193,15 @@ end $$;
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users
   for each row execute function handle_new_user();
+
+-- Migration: trip_id was uuid FK in an earlier schema version; trips are now
+-- generated on-the-fly and never stored, so the column must be plain text.
+do $$ begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'bookings' and column_name = 'trip_id' and data_type = 'uuid'
+  ) then
+    alter table bookings drop constraint if exists bookings_trip_id_fkey;
+    alter table bookings alter column trip_id type text using trip_id::text;
+  end if;
+end $$;
