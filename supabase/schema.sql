@@ -194,6 +194,25 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users
   for each row execute function handle_new_user();
 
+-- Seat reservations — one row per booked seat per trip.
+-- The UNIQUE constraint on (trip_id, seat_number) is the atomic guard against
+-- concurrent double-booking; INSERT will fail with a 23505 error if the seat
+-- is already taken, which the API turns into a 409 Conflict response.
+create table if not exists seat_reservations (
+  id uuid primary key default gen_random_uuid(),
+  trip_id text not null,
+  seat_number text not null,
+  booking_id uuid not null references bookings(id) on delete cascade,
+  reserved_at timestamptz not null default now(),
+  unique (trip_id, seat_number)
+);
+create index if not exists idx_seat_reservations_trip on seat_reservations(trip_id);
+
+do $$ begin
+  create policy "admin view seat reservations" on seat_reservations for select using (is_admin());
+exception when duplicate_object then null; end $$;
+alter table seat_reservations enable row level security;
+
 -- Migration: trip_id was uuid FK in an earlier schema version; trips are now
 -- generated on-the-fly and never stored, so the column must be plain text.
 do $$ begin

@@ -225,7 +225,7 @@ export interface SeatMapResult {
   seats: Seat[];
 }
 
-export function getSeatMap(trip: TripWithRefs): SeatMapResult {
+export function getSeatMap(trip: TripWithRefs, occupiedSeats?: Set<string>): SeatMapResult {
   const rnd = mulberry32(hashSeed(trip.id + "seats"));
   const isFlight = trip.mode === "flights";
   const cols = isFlight ? ["A", "B", "C", "D", "E", "F"] : ["A", "B", "C", "D"];
@@ -253,7 +253,9 @@ export function getSeatMap(trip: TripWithRefs): SeatMapResult {
         col,
         fareClass,
         position,
-        status: rnd() < 0.32 ? "occupied" : "available",
+        status: occupiedSeats
+          ? (occupiedSeats.has(number) ? "occupied" : "available")
+          : (rnd() < 0.32 ? "occupied" : "available"),
         priceModifier: 0,
       });
     }

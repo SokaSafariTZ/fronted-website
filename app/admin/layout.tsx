@@ -6,6 +6,7 @@ import {
   Building2,
   MapPin,
   Route as RouteIcon,
+  Armchair,
   LogOut,
   Plane,
   Bus,
@@ -20,6 +21,7 @@ const ADMIN_NAV = [
   { href: "/admin/operators", label: "Operators", icon: Building2 },
   { href: "/admin/locations", label: "Locations", icon: MapPin },
   { href: "/admin/routes", label: "Routes", icon: RouteIcon },
+  { href: "/admin/trips", label: "Trips & Seats", icon: Armchair },
 ];
 
 const PROVIDER_NAV = [

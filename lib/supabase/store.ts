@@ -13,6 +13,8 @@ import type {
 } from "@/lib/types";
 import { generatePnr } from "@/lib/utils";
 import { getTrip } from "@/lib/data/trips";
+import { reserveSeats, SeatConflictError } from "@/lib/supabase/seats";
+export { SeatConflictError };
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -160,6 +162,15 @@ export async function createBooking(
   const passengers: Passenger[] = (pData ?? []).map((r) =>
     rowToPassenger(r as PassengerRow),
   );
+
+  // Reserve any seats the passengers selected (atomic — throws SeatConflictError on clash)
+  const seatInputs = passengers
+    .filter((p) => p.seatNumber)
+    .map((p) => ({ tripId: trip.id, seatNumber: p.seatNumber!, bookingId: booking.id }));
+
+  if (seatInputs.length > 0) {
+    await reserveSeats(seatInputs);
+  }
 
   return { ...booking, trip, passengers };
 }

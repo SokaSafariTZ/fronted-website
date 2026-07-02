@@ -3,9 +3,6 @@ import { getTrip, getFares, getSeatMap } from "@/lib/data/trips";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/v1/trips/:id
-// Returns the full trip detail, all fare tiers, the seat map, and layout metadata.
-// The Expo app and the website booking flow both consume this endpoint.
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -14,6 +11,12 @@ export async function GET(
   const trip = getTrip(id);
   if (!trip) return fail("Trip not found", 404);
 
-  const { layout, seats } = getSeatMap(trip);
+  let occupiedSeats: Set<string> | undefined;
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    const { getOccupiedSeats } = await import("@/lib/supabase/seats");
+    occupiedSeats = await getOccupiedSeats(id);
+  }
+
+  const { layout, seats } = getSeatMap(trip, occupiedSeats);
   return ok({ trip, fares: getFares(trip), layout, seats });
 }
